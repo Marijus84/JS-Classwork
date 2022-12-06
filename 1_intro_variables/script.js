@@ -93,3 +93,5 @@ console.log(remainder);
 
 let promptAge = prompt("What is your age?", 18);
 console.log(typeof promptAge);
+
+document.write("15");
