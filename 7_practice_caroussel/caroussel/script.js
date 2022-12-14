@@ -21,11 +21,27 @@ const images = [
 ];
 
 let imageIndex = 0;
+let pause = false;
+let intervalID = setInterval(changeImage, 2000);
 
 const imageElement = document.querySelector("img");
-imageElement.src = images[imageIndex];
+const toolbar = document.querySelector("#toolbar");
+const previousButton = document.querySelector("#slider-previous");
+const playPauseIcon = document.querySelector("#slider-toggle i");
+const pauseButton = document.querySelector("#slider-toggle");
+const forwardButton = document.querySelector("#slider-next");
+const shuffleButton = document.querySelector("#slider-random");
 
-let intervalID = setInterval(changeImage, 2000);
+toolbar.addEventListener("click", toggleTools);
+previousButton.addEventListener("click", showPrevious);
+pauseButton.addEventListener("click", togglePause);
+forwardButton.addEventListener("click", changeImage);
+shuffleButton.addEventListener("click", shuffleImage);
+imageElement.addEventListener("load", fadeImage);
+
+imageElement.src = images[imageIndex];
+playPauseIcon.classList.add("fa-pause");
+playPauseIcon.classList.remove("fa-play");
 
 function changeImage() {
   imageIndex++;
@@ -35,15 +51,9 @@ function changeImage() {
   imageElement.src = images[imageIndex];
 }
 
-const toolbar = document.querySelector("#toolbar");
-toolbar.addEventListener("click", toggleTools);
-
 function toggleTools() {
   document.querySelector("nav").classList.toggle("hide");
 }
-
-const previousButton = document.querySelector("#slider-previous");
-previousButton.addEventListener("click", showPrevious);
 
 function showPrevious() {
   clearInterval(intervalID);
@@ -51,26 +61,14 @@ function showPrevious() {
   if (imageIndex < 0) {
     imageIndex = images.length - 1;
   }
-
   imageElement.src = images[imageIndex];
   intervalID = setInterval(changeImage, 2000);
 }
 
-const playPauseIcon = document.querySelector("#slider-toggle i");
-playPauseIcon.classList.add("fa-pause");
-playPauseIcon.classList.remove("fa-play");
-
-const pauseButton = document.querySelector("#slider-toggle");
-pauseButton.addEventListener("click", togglePause);
-
-let pause = false;
-
 function togglePause() {
   playPauseIcon.classList.toggle("fa-pause");
   playPauseIcon.classList.toggle("fa-play");
-
   pause = !pause;
-
   if (pause) {
     clearInterval(intervalID);
   } else {
@@ -78,18 +76,10 @@ function togglePause() {
   }
 }
 
-const forwardButton = document.querySelector("#slider-next");
-forwardButton.addEventListener("click", changeImage);
-
-const shuffleButton = document.querySelector("#slider-random");
-shuffleButton.addEventListener("click", shuffleImage);
-
 function shuffleImage() {
   imageIndex = Math.floor(Math.random() * images.length);
   imageElement.src = images[imageIndex];
 }
-
-imageElement.addEventListener("load", fadeImage);
 
 function fadeImage() {
   imageElement.classList.toggle("fade");
